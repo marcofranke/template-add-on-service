@@ -1,0 +1,45 @@
+server:
+  port: ${PORT:8072}
+
+
+management:
+  endpoint:
+    shutdown:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"  
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false    
+      
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 80000000
+        readTimeout: 80000000
+  hystrix:
+    enabled: false 
+  compression:
+    request:
+      enabled: false 
+      mime-types: text/xml,application/xml,application/json 
+      min-request-size: 2048 
+    response:
+      enabled: false 
+logging:
+  level: 
+    com.macro.cloud.service.UserService: debug
+
+deployment:
+  service:
+    host-ports:
+      max-port-nr: ${DOCKER_HOST_PORT_MAX:8200}
+      min-port-nr: ${DOCKER_HOST_PORT_MIN:8100}
+    data:
+      folder: ${DOCKER_COMPOSE_FOLDER:/home/fma/trick/services/}
+      composeFile: ${DOCKER_COMPOSE_FILE:docker-compose-test.yml}
