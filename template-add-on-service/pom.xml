@@ -153,7 +153,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>de.biba.trick.dummy.login.service.TemplateServiceApplication</mainClass>
+					<mainClass>de.biba.trick.template.add.on.service.TemplateServiceApplication</mainClass>
 					<resource>
 						<directory>lib</directory>
 						<targetPath>/lib</targetPath>
