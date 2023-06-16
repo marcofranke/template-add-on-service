@@ -1,6 +1,5 @@
 package de.biba.trick.template.add.on.service.controller;
 
-import org.apache.xerces.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +10,7 @@ import com.google.gson.Gson;
 
 import de.biba.trick.template.add.on.service.dmo.LoginInput;
 import de.biba.trick.template.add.on.service.dmo.RequestData;
+import de.biba.trick.template.add.on.service.dmo.Token;
 
 /**
  * This is the controller to perform the data exchnage with the TRICK platform (EDM). The endpoint is always the Public API Microservice 
@@ -26,6 +26,9 @@ public class EDMController {
 	@Autowired
 	PublicAPIServiceController publicAPIService;
 	
+	@Autowired
+	LoginController loginController;
+	
 	/**
 	 * It returns all available products in the marketplace
 	 * @param input
@@ -33,13 +36,15 @@ public class EDMController {
 	 */
 	 @CrossOrigin
 		@PostMapping(path = "/getProducts", consumes = "application/json", produces = "application/json")
-		public Object login(@RequestBody LoginInput input ){
+		public Object getProducts(@RequestBody LoginInput input ){
 		 
+		 Object token = loginController.login (input);
 		 Gson gson = new Gson();
-		 String requestAsJSON = gson.toJson(input);
-		 String requestAsBase64 = Base64.encode(requestAsJSON.getBytes());
+		 Token tokenAsObject = gson.fromJson(String.valueOf(token), Token.class); 
 		 RequestData inputForService = new RequestData();
-		 inputForService.setBase64Inputdata(requestAsBase64);
+		 inputForService.setoAuthToken(tokenAsObject.getToken());
+		 
+		 System.out.println("Found token: " + tokenAsObject);
 		 
 		Object r = publicAPIService.invoke("getProducts", inputForService);
 		
